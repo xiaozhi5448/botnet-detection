@@ -80,6 +80,16 @@ Wang 等人在文献[23]中提出了一种更加先进的混合型 P2P 僵尸网
 
 小世界模型僵尸网络虽然很容易构建,但其效率和韧性都比不上随机网络和类 Gnutella 类型,因此并不适合作为僵尸网络的命令与控制机制的实现方式;虽然随机网络方式构建的僵尸网络的效率和韧性都处于良好的水平,但类 Gnutella 方式构建的僵尸网络能够达到更高的效率和更好的韧性.虽然这种方式对于黑客而言较难构建,但已存在的类 Gnutella 方式的 P2P 网络为他们构建高效率且高鲁棒性的僵尸网络奠定了基础.
 
+
+
+### 实例
+
+#### mirai
+
+受Mirai感染的设备会持续地在互联网上扫描[物联网](https://zh.wikipedia.org/wiki/物联网)设备的[IP地址](https://zh.wikipedia.org/wiki/IP地址)。Mirai包含一张IP白名单表，其中包括[专用网络](https://zh.wikipedia.org/wiki/专用网络)的私有IP地址以及分配给[美国邮政署](https://zh.wikipedia.org/wiki/美國郵政署)和[美国国防部](https://zh.wikipedia.org/wiki/美国国防部)的IP地址，使用这些地址的设备将不会受Mirai感染。[[14\]](https://zh.wikipedia.org/wiki/Mirai_(恶意软件)#cite_note-14)
+
+在扫描到IP地址之后，Mirai会通过超过60种常用默认用户名和密码辨别出易受攻击的设备，然后登录这些设备以注入Mirai软件[[15\]](https://zh.wikipedia.org/wiki/Mirai_(恶意软件)#cite_note-webroot-15)[[5\]](https://zh.wikipedia.org/wiki/Mirai_(恶意软件)#cite_note-securityintelligence-5)[[16\]](https://zh.wikipedia.org/wiki/Mirai_(恶意软件)#cite_note-16)。受感染的设备会继续正常工作，不过偶尔会出现卡顿，而且[带宽](https://zh.wikipedia.org/wiki/带宽)消耗会增大[[15\]](https://zh.wikipedia.org/wiki/Mirai_(恶意软件)#cite_note-webroot-15)。设备在重新启动之前将一直保持受感染的状态。设备重启之后，除非用户立刻修改密码，几分钟之内设备很快会被再次感染[[15\]](https://zh.wikipedia.org/wiki/Mirai_(恶意软件)#cite_note-webroot-15)。Mirai还会在成功感染后删除设备上的同类恶意软件，并屏蔽用于远程管理的端口
+
 ### 跟踪检测与防御
 
 #### 跟踪
@@ -236,6 +246,69 @@ P2P僵尸网络
 
 ## 检测方法总结
 
+
+
+### 基于主机流量分析
+
+为 了评估 主机受 恶意代码 感染 的情 况 ，通常使用 主机流量分析来检测扫描、垃圾邮件和 c & C 通信等恶意行为。例如 ，BotHunter 系统利用签名检测和异常检测组件对一个典型的感染生命周期进行检测 。
+
+基于 IR C 的网络流量中僵尸主机频繁使用的呢
+称模式进行建模和检 测。  
+
+### 基于多台主机的水平事件关联
+
+BotSniffer\BotMiner\TAMD
+
+
+
+#### TAMD
+
+基于多主机水平事件关联. 聚合时间窗口内的数据流特征,包括:
+
+- 目的地址
+- payload edit distance
+- 平台
+
+使用这三个维度的数据来区分僵尸网路流量
+
+#### BotSniffer
+
+基于一个时间窗口内,多个主机行为相似性来判断僵尸网络主机.
+
+基于目的地址,对主机的请求分组,请求相同地址的数据被分到一组中, 在检验组内数是否表现出群体相似性,以此决定是否存在僵尸网络
+
+**Response-Crowd-Density-Check Algorithm**
+
+For each time window, we check if there is a dense response crowd2. Recall that a group is a set of clients that connect to the same server. Within this group, we look for any message or activity response behavior. If the fraction of clients with message/activity behavior within the group is larger than a threshold (e.g., 50%), then we say these responding clients form a dense response crowd. 
+
+message/activity response 比例过高,被认定为botnet  
+
+**Response-Crowd-Homogeneity-Check Algorithm**
+
+The intuition of this algorithm is that, instead of looking at the density of response crowd, it is important to consider the homogeneity of a crowd. A homogeneous crowd means that within a crowd, most of the members have very similar responses.
+
+对同一个时间窗口的数据, 使用ngram衡量差异性,如果相似的数据包超过某个阈值,就说明他们是homogeneity
+
+大概率是botnet
+
+
+
+#### BotMiner
+
+
+
+#### **Botnet Detection by Monitoring Group Activities in DNS Traffic**  
+
+根据botnet主机的DNS查询的群体性 行为.
+
+基于以下事实:
+
+1. 只有僵尸主机会查询botmaster的IP地址,所以查询botmaster的主机数量是相对固定的
+2. 这些固定数量的僵尸主机会同时切换botmaster的地址(伴随着群体性的DNS查询)
+3. 僵尸主机的DNS查询具有间歇性,但是正常主机的查询行为是随机的,不可预测的
+
+
+
 **王新良. (2011). 僵尸网络异常流量分析与检测. *北京邮电大学硕士学位论文*.**
 
 
@@ -250,3 +323,134 @@ P2P僵尸网络
 
 
 
+### 基于流量摘要的僵尸网络检测
+
+随着僵尸网络的日益进化, 检测和防范僵尸网络攻击成为网络安全研究的重要任务. 现有的研究很少考虑
+到僵尸网络中的时序模式, 并且在实时僵尸网络检测中效果不佳, 也无法检测未知的僵尸网络. 针对这些问题, 本文
+提出了基于流量摘要的僵尸网络检测方法, 首先将原始流数据按照源主机地址聚合, 划分适当的时间窗口生成流量
+摘要记录, 然后构建决策树、随机森林和 XGBoost 机器学习分类模型. 在 CTU-13 数据集上的实验结果表明, 本文
+提出的方法能够有效检测僵尸流量, 并且能够检测未知僵尸网络, 此外, 借助 Spark 技术也能满足现实应用中快速
+检测的需要  
+
+数据集:CTU-13
+
+### 基于生成对抗网络的僵尸网络检测
+
+为了解决僵尸网络隐蔽性强、难以识别等问题，提高僵尸网络检测精度，提出了基于生成对抗网络的僵尸
+网络检测方法。首先，通过将僵尸网络流量中的数据包重组为流，**分别提取时间维度的流量统计特征和空间维度的**
+**流量图像特征**；然后，基于生成对抗网络的僵尸网络流量特征生成算法，在 2 个维度生产僵尸网络特征样本；最后，**结合深度学习在僵尸网络检测场景下的应用**，提出了基于 DCGAN 的僵尸网络检测模型和基于 BiLSTM-GAN 的僵尸网络检测模型。实验表明，所提模型提高了僵尸网络检测能力和泛化能力。  
+
+生成对抗网络在此处主要用于生成僵尸网络通信样本. 重点关注时间维度的流统计特征和空间温度的流量图像特征
+
+![image-20211215165011369](summary.assets/image-20211215165011369.png)
+
+
+
+数据集:ISCX Botnet 2014
+
+### BotScanner- 2018
+
+一种分布式僵尸网络实时检测方法
+
+陈连栋, 张蕾, 曲武, & 孔明. (2016). 种分布式的僵尸网络实时检测算法. *计算机科学*, *43*(3).
+
+通过学习不同僵尸网络家族C&C通信特征,随后BotScanner使用这些特征建立检测模型来识别相似的流量.
+
+重点理解主机关系链\主机NetFlow图谱
+
+对每个图谱提取特征
+
+B otScanner 主要聚焦于以下 7 个统计特征，分别为主机(U D )N etflow 图谱中两个流之间的平均间隔、平均流持续时长、平均流大小 、流起始时 间的傅里 叶变换 、IP 地址熵 、上 下行 流量比、流量负载熵，  
+
+
+
+### 基于行为分析的僵尸网络对抗技术研究
+
+基于http一问一答包的检测方法
+
+#### 特征选取与预处理
+
+**http请求应答包的大小**
+
+首个 Ｈ ＴＴ Ｐ 请 求包 和首个 Ｈ ＴＴＰ 响 应 包 大 小 熵 值 ， 同一 僵 尸 网 络通 信 流量 由 统一  
+的程序 生成 ， Ｃ ＆ Ｃ通 信 的 内 容基 本 固 定 ， 在一 定观测 时 间 范 围 内 同 Ｉ Ｐ 四 元组 （源  
+Ｉ Ｐ、 目 的 ＩＰ 、 目 的 端 口 、 协 议 ） 包 大 小较 为 固 定 ， 熵值往往较 小。
+
+ **http头部字段统计特征**
+
+请求行路径长度\路径层数\参数数目\请求方法\响应码\Content-Type\UserAgent值长度
+
+
+
+
+
+
+
+## 僵尸网络检测方案
+
+
+
+### 基于流的特征
+
+| 字段                                                         | 描述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Source IP                                                    |                                                              |
+| Destination IP                                               |                                                              |
+| Source port                                                  |                                                              |
+| Destination port                                             |                                                              |
+| protocol                                                     |                                                              |
+| PX(total number of packets exchanged)                        |                                                              |
+| NNP(number of null pkts exchanged)                           |                                                              |
+| PSP(percentage of small pkts exchanged)                      |                                                              |
+| IOPR(ratio between the number of incoming packets over the nmber of outgoing packets) | used to identify similar connection                          |
+| Reconnect                                                    | To capture bots that perform frequent reconnections to evade detection |
+| Duration(flow duration)                                      | Used to classifying traffic into IRC chat and non IRC. In some botnets e.g. weasel that establish brief connections, this feature can also beused to identify similar malicious communications |
+| FPS(length of first packet)                                  | Many protocols show identical behavior when exchanging the first packet |
+| TBT(total number of bytes)                                   | This feature is used to extract similarity in botnets traffic, e.g. fixedlength commands |
+| APL(average Payload packet length)                           | this feature is used to extract similarity in botnets traffic |
+| DPL(total number of packets with the same length over the total number of packets) | similar traffic                                              |
+| PV(数据包长度的标准差)                                       | similar traffic and also classify IRC traffic from non IRC traffic |
+| ABPS(average bits per second)                                | similar traffic and to classify IRC traffic from non IRC traffic |
+| **PS(average pkts-per-second in a time window)**             | This feature is used to extract similarity in botnet traffic and also to classify IRC traffic and non IRC traffic |
+| ~~AIT(average inter arrival time of packets)~~               |                                                              |
+| PPS(每秒传输的平均数据包数量)                                |                                                              |
+| TTF                                                          | Total transmission flows per host in time-window             |
+| TTUC                                                         | Total transmission unique connections per host in time-window |
+| TCC                                                          | Total connections try per host in a time-window.             |
+|                                                              | High-severity of dest. port rates in time-window             |
+| UDPR                                                         | The rate of use of unique dest. ports per host in time-window. |
+| USPR                                                         | The rate of use of unique source ports per host in time-window. |
+| UHCR                                                         | The rate of transmission of unique host connections in time-window. |
+|                                                              | High-severity of source port rates in time-window.           |
+| FR                                                           | Failures connections rates per host in a given time interval.(连接失败的比率) |
+| CPR                                                          | Control packets Entropy rate for connections per host in time-window |
+| RCPR                                                         | Received Control packets entropy rate for connections per node in time-window. |
+| TCPR                                                         | Transmitted Control packets entropy rates for connections per node in time-window. |
+| ATC                                                          | The avg. time between host connections                       |
+| NSP                                                          | Number of small packets(length of 63-400 bytes)              |
+| DPL                                                          | the total of number of different packet size over the total number of packets |
+| MPL                                                          | The maximum of packet length in the flow                     |
+| MP                                                           | the number of maximum packets                                |
+| BPS                                                          | the average bits per second                                  |
+| PPS                                                          | the average pkts per second                                  |
+| UDPR                                                         | 在一个时间窗口内udp包占传输层协议包的比率                    |
+| DOR                                                          | 在一段时间（几个小时）内访问的二级域名中最频繁的域名访问次数占dns查询的比率（domain-flux） |
+| DCC                                                          | 在一段时间内访问的二级域名中IP地址变化最频繁的次数（fast-flux） |
+
+### 数据集
+
+CTU-13
+
+![Table 2. Characteristics of botnet scenarios](summary.assets/Table2.jpg)
+
+
+
+
+
+## 论文相关
+
+### 僵尸网络危害
+
+部署DDos攻击
+
+通过僵尸节点提供的socks代理发送垃圾邮件

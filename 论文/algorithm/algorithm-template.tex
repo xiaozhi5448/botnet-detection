@@ -1,0 +1,128 @@
+\documentclass[preprint,12pt]{elsarticle}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\renewcommand{\algorithmicrequire}{\textbf{input:}}
+\renewcommand{\algorithmicensure}{\textbf{output:}}
+
+
+\usepackage{setspace}
+\begin{document}
+    \subsection{algorithm}
+
+
+    \begin{algorithm}
+        \caption{Convert text instructions to vectors}
+        \begin{algorithmic}[1]
+            \Require $command$
+            \Ensure $vector$
+            \Function{vectorize}{$command$}
+            \State $ items \gets command.split() $
+            \State $ result \gets list() $
+            \For{each $word \in items$}
+            \State $ result.append(word) $
+            \EndFor
+            \State \Return $result$
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Build Dictionary}
+        \begin{algorithmic}[1]
+            \Require $commands$
+            \Ensure $result$
+            \Function{buildDict}{$commands$}
+            \State $result \gets \{\} $
+            \State $maxIdVal \gets 0 $
+            \For{each $command\in commands$}
+            \For{each $word\in command$}
+            \If{$!word\in result$}
+            \State $maxIdVal \gets maxIdVal + 1$
+            \State $result[word] \gets maxIdVal$
+            \EndIf
+            \EndFor
+            \EndFor
+            \State \Return{$result$}
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Convert text instructions to vectors}
+        \begin{algorithmic}[1]
+            \Require $command$
+            \Ensure $vector$
+            \Function{vectorize}{$command$}
+            \State $ items \gets command.split() $
+            \State $ result \gets list() $
+            \For{each $word \in items$}
+            \State $ result.append(word) $
+            \EndFor
+            \State \Return $result$
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{relative n-gram distance}
+        \begin{algorithmic}[1]
+            \Require $bound, trainVectors, testVectors$
+            \Ensure $ resList$
+            \Function{calculateRes}{$bound, trainVectors, testVectors$}
+            \State $ resList \gets list() $
+            \State $normalPred \gets [] $
+            \For{each$testVector \in testVectors$}
+            \State $distances \gets []$
+            \For{each $trainVec \in trainVectors$}
+            \State $ distances.append(nGramDistance(trainVec, testVector))$
+            \EndFor
+            \State $minDis \gets min(distances)$
+            \State $predRes \gets 0$
+            \If{$minDis \ge bound$}
+            \State $predRes \gets 1$
+            \EndIf
+            \State $resList.append(predRes)$
+            \EndFor
+            \State \Return $resList$
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+    \subsection{Tcp session}
+    \begin{algorithm}
+        \caption{aggregate packet by src and dst}
+        \begin{algorithmic}
+            \Require{ $packets$ }
+            \Ensure{ $groups$ }
+            \Function{aggregatePacket}{packets}
+            \State $ groups \gets dict() $
+            \For{each $ packet \in packets $}
+            \If{$ src \ge dst $}
+            \State $ key \gets src + sport + dst + dport $
+            \Else
+            \State $ key \gets dst + dport + src + sport $
+            \EndIf
+            \If{$ key \in groups $}
+            \State $ groups[key].append(packet) $
+            \Else
+            \State $ groups[key] = list() $
+            \State $ groups[key].append(packet) $
+            \EndIf
+            \EndFor
+            \For{each $ key \in groups $}
+            \State  $ groups[key].sort() $
+            \EndFor
+
+            \State \Return $ groups $
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+
+\end{document}
